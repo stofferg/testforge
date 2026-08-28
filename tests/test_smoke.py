@@ -1,14 +1,20 @@
-import re
 from playwright.sync_api import expect
+from pages.example_page import ExamplePage
 
 
-def test_example(page):
-    page.goto("https://example.com")
+def test_learn_more_link_is_visible(page):
+    example = ExamplePage(page)
+    example.open()
 
-    link = page.get_by_role("link", name="Learn more")
+    expect(example.learn_more_link).to_be_visible()
 
-    expect(link).to_be_visible()
 
-    link.click()
+def test_learn_more_link_navigates_to_iana(page):
+    example = ExamplePage(page)
+    example.open()
 
-    expect(page).to_have_url("https://www.iana.org/help/example-domains")
+    example.click_learn_more()
+
+    expect(page).to_have_url(
+        "https://www.iana.org/help/example-domains"
+    )
